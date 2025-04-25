@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -5,7 +6,48 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AirlineInfo from './AirlineInfo';
 import FlightDetails from './FlightDetails';
-import { Flight } from './FlightResult'; // Keeping the existing type import
+
+export interface Flight {
+  departureTime: string;
+  arrivalTime: string;
+  duration: string;
+  stops: string;
+  airlines: {
+    main: string;
+    partners?: string[];
+  };
+  price: {
+    amount: number;
+    currency: string;
+  };
+  emissions: {
+    amount: number;
+    unit: string;
+    status: string;
+    percentage?: number;
+  };
+  segments: Array<{
+    departure: {
+      time: string;
+      airport: string;
+      code: string;
+    };
+    arrival: {
+      time: string;
+      airport: string;
+      code: string;
+    };
+    duration: string;
+    airline: string;
+    flightNumber: string;
+    aircraft?: string;
+    amenities: Array<{
+      type: 'legroom' | 'usb' | 'wifi' | 'power' | 'video' | 'emissions';
+      value: string;
+      details?: string;
+    }>;
+  }>;
+}
 
 export interface FlightResultProps {
   flight: Flight;
@@ -57,28 +99,28 @@ export function FlightResult({ flight, isRecommended = false, className }: Fligh
         className
       )}
     >
-      <div className="p-3 sm:p-4"> {/* Reduced padding */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0"> {/* Added space between flex items */}
-          <div className="flex items-center gap-3"> {/* Reduced gap and changed to flex-row */}
+      <div className="p-3 sm:p-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
+          <div className="flex items-center gap-3">
             <AirlineInfo 
               airline={flight.airlines.main}
               partners={flight.airlines.partners}
-              logoSize="sm" {/* Made logo smaller */}
+              logoSize="sm"
             />
             
-            <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4"> {/* Reduced gap */}
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
               <div>
                 <div className="flex items-center">
-                  <span className="text-base font-bold">{flight.departureTime}</span> {/* Slightly smaller text */}
+                  <span className="text-base font-bold">{flight.departureTime}</span>
                   <span className="mx-1 text-gray-400">–</span>
                   <span className="text-base font-bold">{flight.arrivalTime}</span>
                 </div>
-                <div className="text-xs text-gray-500"> {/* Smaller text for duration */}
+                <div className="text-xs text-gray-500">
                   {flight.duration}
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2"> {/* Compact spacing */}
+              <div className="flex items-center space-x-2">
                 <Badge variant={flight.stops === "Non-stop" ? "outline" : "secondary"} className="mr-1 text-xs">
                   {flight.stops}
                 </Badge>
@@ -101,17 +143,17 @@ export function FlightResult({ flight, isRecommended = false, className }: Fligh
             </div>
           </div>
           
-          <div className="flex flex-col items-end space-y-1"> {/* Reduced spacing */}
-            <span className="text-base font-bold"> {/* Slightly smaller text */}
+          <div className="flex flex-col items-end space-y-1">
+            <span className="text-base font-bold">
               {formatCurrency(flight.price.amount, flight.price.currency)}
             </span>
             <span className="text-xs text-gray-500">round trip</span>
             
             <Button 
               variant={isRecommended ? "default" : "outline"}
-              size="sm" {/* Made button smaller */}
+              size="sm"
               className={cn(
-                "mt-1", // Reduced top margin
+                "mt-1",
                 isRecommended && "bg-blue-500 hover:bg-blue-600"
               )}
             >
@@ -121,24 +163,24 @@ export function FlightResult({ flight, isRecommended = false, className }: Fligh
         </div>
 
         {expanded && (
-          <div className="mt-4 border-t pt-3"> {/* Reduced spacing */}
+          <div className="mt-4 border-t pt-3">
             <FlightDetails segments={flight.segments} />
           </div>
         )}
         
         <button
           onClick={() => setExpanded(!expanded)}
-          className="mt-2 flex items-center justify-center w-full text-xs text-gray-600 hover:text-gray-900" // Reduced text size and top margin
+          className="mt-2 flex items-center justify-center w-full text-xs text-gray-600 hover:text-gray-900"
         >
           {expanded ? (
             <>
               <span className="mr-1">Hide details</span>
-              <ChevronUp size={14} /> {/* Smaller icon */}
+              <ChevronUp size={14} />
             </>
           ) : (
             <>
               <span className="mr-1">Show details</span>
-              <ChevronDown size={14} /> {/* Smaller icon */}
+              <ChevronDown size={14} />
             </>
           )}
         </button>
