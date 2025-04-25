@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -8,6 +7,7 @@ import AirlineInfo from './AirlineInfo';
 import FlightDetails from './FlightDetails';
 
 export interface Flight {
+  id: string; // Adding the id property to resolve the TypeScript error
   departureTime: string;
   arrivalTime: string;
   duration: string;
