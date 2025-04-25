@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -7,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FlightResult, Flight } from "@/components/FlightResult";
 import { ChevronDown, ChevronUp, Clock, Plane, MapPin } from "lucide-react";
+import CabinClassSelector from "@/components/CabinClassSelector";
 
 // Sample flight data based on the provided screenshot
 const flightData: Flight[] = [
@@ -310,6 +310,7 @@ const flightData: Flight[] = [
 export default function Index() {
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<'recommended' | 'price' | 'duration' | 'emissions'>('recommended');
+  const [selectedFlight, setSelectedFlight] = useState<Flight | null>(null);
   
   // Sort flights based on selected criteria
   const sortedFlights = [...flightData].sort((a, b) => {
@@ -407,6 +408,8 @@ export default function Index() {
                   key={flight.id}
                   flight={flight}
                   isRecommended={sortBy === 'recommended' && index === 0}
+                  className="cursor-pointer hover:border-blue-200"
+                  onClick={() => setSelectedFlight(flight)}
                 />
               ))}
             </div>
@@ -414,39 +417,7 @@ export default function Index() {
 
           <div className="lg:col-span-1">
             <div className="sticky top-4">
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-2">Route Details</h3>
-                  <div className="flex items-center mb-4">
-                    <MapPin className="w-4 h-4 text-gray-500 mr-2" />
-                    <span className="text-sm">LHR - SFO</span>
-                  </div>
-                  
-                  <h3 className="font-semibold mb-2">Departure</h3>
-                  <p className="text-sm text-gray-600 mb-4">Wed 21 May, 2025</p>
-                  
-                  <Separator className="my-4" />
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Average Price:</span>
-                      <span className="text-sm font-medium">£518</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Average Duration:</span>
-                      <span className="text-sm font-medium">11h 20m</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm text-gray-600">Average CO2:</span>
-                      <span className="text-sm font-medium">640 kg</span>
-                    </div>
-                  </div>
-                  
-                  <Separator className="my-4" />
-                  
-                  <Button className="w-full">Change Search</Button>
-                </CardContent>
-              </Card>
+              <CabinClassSelector flight={selectedFlight} />
             </div>
           </div>
         </div>

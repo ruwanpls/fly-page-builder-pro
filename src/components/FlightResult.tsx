@@ -53,9 +53,10 @@ export interface FlightResultProps {
   flight: Flight;
   isRecommended?: boolean;
   className?: string;
+  onClick?: () => void;
 }
 
-export function FlightResult({ flight, isRecommended = false, className }: FlightResultProps) {
+export function FlightResult({ flight, isRecommended = false, className, onClick }: FlightResultProps) {
   const [expanded, setExpanded] = useState(false);
   
   const formatCurrency = (amount: number, currency: string) => {
@@ -98,6 +99,9 @@ export function FlightResult({ flight, isRecommended = false, className }: Fligh
         isRecommended && "border-blue-500 shadow-blue-100",
         className
       )}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
     >
       <div className="p-3 sm:p-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between space-y-2 sm:space-y-0">
